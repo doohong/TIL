@@ -1,8 +1,8 @@
 # Effective Java
 
 # 목차
-- 1-1 생성자 대신 static 팩토리 메소드 사용을 고려하자
-
+- 1-1 [생성자 대신 static 팩토리 메소드 사용을 고려하자](#생성자-대신-static-팩토리-메소드-사용을-고려하자)
+- 1-2 [생성자의 매개변수가 많을 때는 빌더를 고려하자](#생성자의-매개변수가-많을-때는-빌더를-고려하자)
 # 생성자 대신 static 팩토리 메소드 사용을 고려하자
 
 ## 생성자
@@ -49,3 +49,85 @@ static 팩토리 메소드를 제공하면 다음과 같은 장단점이 있다.
 
 ## 요약
 static 팩토리 메소드와 public 생성자는 모두 나름의 용도가 있으므로 상호간의 장점을 아는 것이 중요하다. 대게 static 팩토리 메소드가 더 좋을때가 많으므로 고려하지 않고 public 생성자를 사용하는 습관을 피하자 
+
+# 생성자의 매개변수가 많을 때는 빌더를 고려하자
+매개변수가 많아질 경우 해당 클래스의 객체를 생성하려면 신축성 있게 처리하지 못한다.
+
+## 해결방안
+
+1. 텔리스코핑 생성자 패턴
+필수 매개변수들만 갖는 생성자, 필수 매개변수들과 선택 매개변수 하나를 갖는 생성자, 필수 매개변수들과 선택 매개변수 두 개를 갖는 생성자 등의 형태로 모든 선택 매개변수를 생성자가 가질 수 있도록 여러 개의 생성자를 겹겹이 만드는 방법이다.
+적은 매개변수만 사용한다면 그리 나쁜 것 같지 않지만 매개변수의 수가 증가하면 무척 번거로워진다.
+
+2. 자바빈즈 패턴
+매개변수가 없는 생성자를 호출해서 객체를 생선한 후 세터(setter) 메소드를 호출해서 각각의 필수 필드와 선택 필드 값을 지정한다.
+```java
+// 자바빈즈 패턴
+public class CafeMenu {
+	private int coffee = 1;		//필수 
+	private int beverage = 1;	//필수 
+	private int dessert = 0;	//선택 
+	private int bakery = 0;		//선택
+	private int drinks = 0;		//선택 
+	public CafeMenu(){}
+	//setter 
+	public void setCoffee(int coffee) {
+		this.coffee = coffee;
+	}
+	public void setBeverage(int beverage) {
+		this.beverage = beverage;
+	}
+	public void setDessert(int dessert) {
+		this.dessert = dessert;
+	}
+	public void setBakery(int bakery) {
+		this.bakery = bakery;
+	}
+	public void setDrinks(int drinks) {
+		this.drinks = drinks;
+	}
+```
+코드가 조금 길어지기는 하지만 인스턴스 생성이 간단하고 코드의 가독성도 좋다.
+하지만 1회의 호출로 객체생성을 끝낼 수 없으므로 객체의 일관성이 깨질 수 있다. 또한 큰 단점으로 자바빈즈 패턴은 불변 클래스를 만들 수 있는 가능성을 배제하므로 스레드에서 안전성을 유지하려면 프로그래머의 추가적인 노력이 필요하다는 단점이 있다.
+3. 빌더 패턴
+빌더 패턴은 텔리스코핑 생성자 패턴의 안전성과 자바빈즈 패턴의 가독성을 결합한 방법이다.
+원하는 객체를 바로 생성하는 대신 클라이언트는 모든 필수 매개변수를 갖는 생성자를 호출하여 빌더 객체를 얻는다. 그 다음에 빌더 객체의 세터 메소드를 호출하여 필요한 선택 매개변수들의 값을 설정한다. 마지막으로, 클라이언트는 매개변수가 없는 build 메소드를 호출하여 불변 객체를 생성한다.
+```java
+// 빌더 패턴
+public class NutritionFacts{
+    private final int servingSize; // 필수 매개변수
+    private final int servings; // 필수 매개변수
+    private final int calories; // 선택 매개변수
+    private final int fat; // 선택 매개변수
+
+    public static class Builder{
+        private final int servingSize;
+        private final int servings;
+
+        private int calories = 0; // 선택 매개변수 초기화
+        private int fat = 0; // 선택 매개변수 초기화
+        public Builder(int servingSize, int servings){
+            this.servingSize = servingSize;
+            this.servings = servings;
+        }
+        public Builder calories(int val){
+            calories = val; return this;
+        }
+        public Builder fat(int val){
+            fat = val; return this;
+        }
+        public NutritionFacts build(){
+            return new NutritionFacts(this);
+        }
+    }
+    private NutritionFacts(Builder builder){
+        servingSize = builder.servingSize;
+        servings = builder.servings;
+        calories = builder. calories;
+        fat = builder.fat;
+    }
+// 사용
+NutritionFacts cocaCola = new NutritionFacts.builder(1,1).calories(10).bulid();
+```
+## 요약
+생성자나 static 팩토리 메소드에서 많은 매개변수를 갖게 되는 클래스를 설계할 때는 필더 패턴이 좋은 선택이다.
