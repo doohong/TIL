@@ -3,6 +3,7 @@
 # 목차
 - 1-1 [생성자 대신 static 팩토리 메소드 사용을 고려하자](#생성자-대신-static-팩토리-메소드-사용을-고려하자)
 - 1-2 [생성자의 매개변수가 많을 때는 빌더를 고려하자](#생성자의-매개변수가-많을-때는-빌더를-고려하자)
+- 1-3 [private 생성자나 enum 타입을 사용해서 싱글톤의 특성을 유지하자](#private-생성자나-enum-타입을-사용해서-싱글톤의-특성을-유지하자)
 # 생성자 대신 static 팩토리 메소드 사용을 고려하자
 
 ## 생성자
@@ -17,7 +18,7 @@ Car car = new Car();
 ```java
 public static Boolean valueOf(boolean b){ 
     return b ? Boolean.TRUE : Boolean.FALSE; 
-    }
+   # }
 ```
 위에 코드는 책에 나오는 예제이다.
 클래스에서는 생성자를 대신하거나, 또는 생성자에 부가하여 static 팩토리 메소드를 가질 수 있다.
@@ -131,3 +132,42 @@ NutritionFacts cocaCola = new NutritionFacts.builder(1,1).calories(10).bulid();
 ```
 ## 요약
 생성자나 static 팩토리 메소드에서 많은 매개변수를 갖게 되는 클래스를 설계할 때는 필더 패턴이 좋은 선택이다.
+
+# private 생성자나 enum 타입을 사용해서 싱글톤의 특성을 유지하자
+
+## 싱글톤
+디자인 패턴 중 가장 간단하면서도 자주 사용하는 패턴 중 하나이며 하나의 인스턴스만 생성되는 클래스이다.
+
+1. public final 필드를 갖는 싱글톤
+```java
+public class Elvis{
+    public static final Elvis INSTANCE = new Elvis();
+    private Elvis(){...}
+    public void leaveTheBuilding(){
+
+    }
+}
+```
+2. static 팩토리 메소드를 갖는 싱글톤
+```java
+public class Elvis{
+    private static final Elvis INSTANCE = new Elvis();
+    private Elvis(){...}
+    public static Elvis getInstance(){return INSTANCE;}
+    public void leaveTheBuilding(){
+    }
+}
+```
+이 방법의 이점은 클래스에서 반환하는 싱글톤 인스턴스의 형태를 변경할 수 있는 유연성을 제공한다.
+
+위 두 가지 방법으로 구현한 싱글톤 클래스를 직렬화 하기 위해서는 Serializable을 implements해야 하며 싱글톤을 보장받기 위해서는 인스턴스 필드를 transient로 선언해야 하며 readResolve 메소드를 추가해야 한다.
+3. 열거형(Enum)싱글톤
+```java
+public enum Elvis{
+    INSTANCE;
+    public void leaveTheBuilding(){...}
+}
+```
+이 방법은 가 항목과 기능적으로는 동일하지만 더 간단하며 앞서 나온 가,나 항목과 다르게 직렬화가 자동으로 지원되고 인스턴스가 여러 개 생기지 않도록 보장하는 장점이 있다.
+## 요약
+싱글톤 구현 시 열거형(Enum) 방법이 가장 좋은 방법이다.
