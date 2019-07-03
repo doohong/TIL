@@ -7,7 +7,7 @@
 ## Java
 [이팩티브자바](https://github.com/doohong/TIL/blob/master/Java/effective_java.md)
 ## Spring
-[Spring이란](/Spring/spring_summary.md)
+[Spring이란](/Spring/Spring_summary.md)
 
 [security](/Spring/spring_security.md)
 ## ETC
