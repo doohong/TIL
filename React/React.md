@@ -127,3 +127,21 @@ class Movie extends Component{
   }
 }
 ```
+
+### Component Lifecycle
+컴포넌트는 여러 기능들을 정해진 순서대로 실행하는데 이것이 컴포넌트의 라이프 사이클이다. 
+컴포넌트는 componentWillMount() -> render() -> componentDidMount() 이 순서대로 사용자가 원하든 원하지않든 사이클이 발생한다.  
+각각의 메서드를 정의해서 console.log를 찍어보면 순서대로 발생하는것을 확인 할 수 있다.
+
+컴포넌트가 처음 실행될 때 그것을 Mount라고 표현한다. 컴포넌트가 시작되면 우선 context, defaultProps와 state를 저장한다. 그 후에 componentWillMount 메소드를 호출한다. 그리고 render로 컴포넌트를 DOM에 부착한 후 Mount가 완료된 후 componentDidMount가 호출된다.
+
+주의할 점은, componentWillMount에서는 props나 state를 바꾸면 안된다. Mount 중이기 때문이다. 그리고 아직 DOM에 render하지 않았기 때문에 DOM에도 접근할 수 없다.
+
+componentDidMount에서는 DOM에 접근할 수 있다. 그래서 여기에서는 주로 AJAX 요청을 하거나, setTimeout, setInterval같은 행동을 한다.
+
+정리하면 다음 순서로 실행된다.
+
+1. state, context, defaultProps 저장
+2. componentWillMount
+3. render
+4. componentDidMount
