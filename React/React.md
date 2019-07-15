@@ -83,3 +83,47 @@ export default App
 ```
 이렇게 부모 컴포넌트에서 movies라는 배열의 각 요소를 자식 컴포넌트에게 title이라는 키로 전달 할 수 있으며 꼭 {}를 써줘야 한다.
 자식 컴포넌트에서는 {this.props.title}을 이용하여 title정보를 받을 수 있다.
+
+### Lists with .maps
+movies라는 배열의 각 요소를 한개씩 전달하였지만 실제 API를 호출해서 영화 정보를 받아올때는 몇개가 있을지 모르기 때문에 기존 방식으로는 문제가 있다.
+해결하기 좋은 방법으로는 JavaScript의 map 메서드를 이용하는 방법이다. 
+```js
+const movies = [
+  {
+    title: "스파이더맨"
+  },
+  {
+    title: "알라딘"
+  } 
+]
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        {movies.map(movie => {
+         return <Movie title={movie.title} />
+        })}
+      </div>
+    );
+  }
+}
+export default App
+```
+위처럼 map을 통해 배열의 각 엘리먼트를 활용해서 새로운 array를 만든다. map 메서드는 (여기)[https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/map]를 통해 확인할 수 있다.
+
+### Validating Props with Prop Types
+리액트는 엘리먼트가 많을 경우 Key라는 unique한 값을 부여해야 한다. 위에 예제의 경우는 map의 두번째 매개변수인 index를 이용하여 각각 고유한 키값을 부여할 수 있다.
+```js
+{movies.map(movie, index => {
+         return <Movie title={movie.title} key={index} />
+        })}
+```
+또한 자식 컴포넌트에서 전달받을 props에 원하는 타입을 지정할 수 있다.
+위의 예제의 경우 Movie컴포넌트가 자식 컴포넌트이고 자식 컴포넌트에 propTypes를 설정하면 된다. 더이상 React.propTypes는 사용되지 않으므로 이방법을 이용하려면 yarn을 이용해서 prop-types를 설치해야 한다. 추가적으로 isRequired라고 작성하면 해당 prop은 제공하는 것이 필수로 설정된다.
+```js
+class Movie extends Component{
+  static propTypes = {
+    title: React.propTypes.string.isRequired
+  }
+}
+```
