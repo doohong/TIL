@@ -145,3 +145,24 @@ componentDidMount에서는 DOM에 접근할 수 있다. 그래서 여기에서�
 2. componentWillMount
 3. render
 4. componentDidMount
+
+### Practicing this setState
+페이지가 로드되고 난 후 일정시간 뒤에 작업이 일어나도록 하려면 setTimeout 을 이용하면 된다. 
+영화가 후에 추가되거나 값이 변경되어 영화를 담고있는 state의 값을 변경시켜주려면 setState를 이용하면 된다.
+
+페이지가 로드 된 후 영화를 한개 추가하고자 하면 setTimeout 안에 setState를 사용하면 된다.
+```js
+componentDidMount(){
+    setTimeout({}=>{
+        this.setState({
+            movies:[
+                ...this.state.movies
+                {
+                    title: "추가될영화"
+                }
+            ]
+        })
+    },1000)
+}
+```
+위에처럼 작성하게 되면 1초뒤에 영화를 한개 생성한다. 만약 ...this.state.movies 이부분이 없다면 기존의 state.movies의 내용이 작성한 내용으로 덮어 씌여진다.
