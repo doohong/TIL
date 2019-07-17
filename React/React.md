@@ -166,3 +166,47 @@ componentDidMount(){
 }
 ```
 위에처럼 작성하게 되면 1초뒤에 영화를 한개 생성한다. 만약 ...this.state.movies 이부분이 없다면 기존의 state.movies의 내용이 작성한 내용으로 덮어 씌여진다.
+
+### Loading states
+필요한 데이터가 항상 바로 즉시 존재하지는 않을 것이다.
+데이터가 존재하지 않을때 데이터를 불러오면 에러가 발생할 것이다. 그런 일을 대비하여 데이터가 존재하지 않는 동안 기다리는 api콜을 타임아웃 기능으로 유사하게 구현 해 볼 것이다. 먼저 state는 비운 채로 시작한다.
+```js
+componentDidMount(){
+    setTimeout({}=>{
+        this.setState({
+            movies:[
+                {
+                    title: "추가될영화"
+                }
+            ]
+        })
+    },1000)
+}
+ render(){
+    return (
+      <div className="App">
+        {this.state.movies.map((movie,index) => {
+        return <Movie title={movie.title} poster={movie.poster} key={index} />
+         })};
+      </div>
+    );
+  }
+```
+이렇게 되면 state.movies가 render 사이클에서 존재하지 않으므로 에러가 난다.
+```js
+ _renderMovies = () => {
+  const movies =  this.state.movies.map((movie,index) => {
+    return <Movie title={movie.title} key={index} />
+  });
+  return movies;
+};
+  render(){
+    return (
+      <div className="App">
+        {this.state.movies ? this._renderMovies() : "Lodding"}
+      </div>
+    );
+  }
+```
+위와 같이 작성하여 state.movies가 존재하는지 확인을 하고 존재할 경우 우리가 만든 _renderMovies()를 이용하여 영화를 화면에 띄워줄 수 있다.
+리액트는 자체 기능이 많기 때문에 리액트 자체 기능과 내가 만든 기능을 구별해주기 위해 언더스코프를 메서드 앞에 붙이게 된다.
