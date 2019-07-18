@@ -83,6 +83,26 @@ export default App
 ```
 이렇게 부모 컴포넌트에서 movies라는 배열의 각 요소를 자식 컴포넌트에게 title이라는 키로 전달 할 수 있으며 꼭 {}를 써줘야 한다.
 자식 컴포넌트에서는 {this.props.title}을 이용하여 title정보를 받을 수 있다.
+```js
+class App extends React.Component {
+    render(){
+        return  (
+            <div>
+                <Header title={ this.props.headerTitle }/>
+                <Content title={ this.props.contentTitle }
+                          body={ this.props.contentBody }/>
+            </div>
+        );
+    }
+}
+
+App.defaultProps = {
+    headerTitle: 'Default header',
+    contentTitle: 'Default contentTitle',
+    contentBody: 'Default contentBody'
+};
+```
+위와 같이 부모 컴포넌트에서 App.defaultProps를 이용해 기본적으로 props를 설정해줄수있다.
 
 ### Lists with .maps
 movies라는 배열의 각 요소를 한개씩 전달하였지만 실제 API를 호출해서 영화 정보를 받아올때는 몇개가 있을지 모르기 때문에 기존 방식으로는 문제가 있다.
