@@ -104,9 +104,23 @@ App.defaultProps = {
 ```
 위와 같이 부모 컴포넌트에서 App.defaultProps를 이용해 기본적으로 props를 설정해줄수있다.
 
+또한 동적으로 값을 변경하고 싶은경우에는 props 대신 state를 사용하면 된다.
+setState를 이용하여 기존의 값을 변경 시킬 수 있다.
+
 ### Lists with .maps
 movies라는 배열의 각 요소를 한개씩 전달하였지만 실제 API를 호출해서 영화 정보를 받아올때는 몇개가 있을지 모르기 때문에 기존 방식으로는 문제가 있다.
 해결하기 좋은 방법으로는 JavaScript의 map 메서드를 이용하는 방법이다. 
+map은 말 그대로 1:1로 매핑을 시켜주는 메서드라 생각하면 좋다
+> 배열.map((요소, 인덱스, 배열) => { return 요소 });
+```js
+const oneTwoThree = [1, 2, 3];
+let result = oneTwoThree.map((v) => {
+  console.log(v);
+  return v;
+});
+```
+위의 결과로는 콘솔에는 1 2 3이 찍히게 되고 result에는 배열이 그대로 나오게 된다.
+map은 기존의 array를 변경시키는 것이 아니고 새로운 array를 만드는 것 이다.
 ```js
 const movies = [
   {
