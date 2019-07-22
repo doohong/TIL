@@ -159,7 +159,7 @@ class App extends React.Component {
 }
 export default App
 ```
-위처럼 map을 통해 배열의 각 엘리먼트를 활용해서 새로운 array를 만든다. map 메서드는 (여기)[https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/map]를 통해 확인할 수 있다.
+위처럼 map을 통해 배열의 각 엘리먼트를 활용해서 새로운 array를 만든다. map 메서드는 [여기](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/map)를 통해 확인할 수 있다.
 
 ### Validating Props with Prop Types
 리액트는 엘리먼트가 많을 경우 Key라는 unique한 값을 부여해야 한다. 위에 예제의 경우는 map의 두번째 매개변수인 index를 이용하여 각각 고유한 키값을 부여할 수 있다.
