@@ -1,5 +1,5 @@
 # React 기초
----
+
 ## 목차
 - [React 기초](#react-%EA%B8%B0%EC%B4%88)
   - [리액트의 특징](#%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%9D%98-%ED%8A%B9%EC%A7%95)
