@@ -9,6 +9,7 @@
 ## Spring
 [Spring이란](/Spring/spring_summary.md)
 [AOP](/Spring/spring_aop.md)
+[JPA](/Spring/spring_jpa.md)
 [security](/Spring/spring_security.md)
 
 ## React
